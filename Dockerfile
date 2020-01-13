@@ -14,6 +14,7 @@ RUN go install rancher-memory-limiter
 
 
 FROM alpine
+RUN apk add --no-cache ca-certificates
 COPY --from=build /go/bin/rancher-memory-limiter /usr/bin/rancher-memory-limiter
 
 CMD ["/usr/bin/rancher-memory-limiter"]
