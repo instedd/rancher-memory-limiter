@@ -1,7 +1,9 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -32,9 +34,20 @@ func setMemoryLimit() {
 		log.Fatal(err)
 	}
 
+	resp, err := http.Get("http://rancher-metadata/latest/self/host/uuid")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	uuidBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	uuid := string(uuidBytes)
+
 	var host *rancher.Host
 	for _, h := range hosts.Data {
-		if h.Hostname == os.Getenv("HOSTNAME") {
+		if h.Uuid == uuid {
 			host = &h
 			break
 		}
