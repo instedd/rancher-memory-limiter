@@ -4,11 +4,19 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	rancher "github.com/rancher/go-rancher/v2"
 )
 
 func main() {
+	for {
+		setMemoryLimit()
+		time.Sleep(time.Hour)
+	}
+}
+
+func setMemoryLimit() {
 	opts := rancher.ClientOpts{
 		Url:       os.Getenv("CATTLE_CONFIG_URL"),
 		AccessKey: os.Getenv("CATTLE_ACCESS_KEY"),
